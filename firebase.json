@@ -1,5 +1,6 @@
 {
   "hosting": {
+	  "site": "termproject-sadasdasd",
     "public": "public",
     "ignore": [
       "firebase.json",

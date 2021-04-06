@@ -80,7 +80,7 @@ for(let i = 0;i < deleteForms.length;i++){
 		const uid= e.target.uid.value
 
 	  try{
-		  await FirebaseController.deleteUserData(uid)
+		 
 		  await FirebaseController.deleteUser(uid);
 
 		  document.getElementById(`user-card-${uid}`).remove()
