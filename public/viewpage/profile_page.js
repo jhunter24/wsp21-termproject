@@ -135,6 +135,7 @@ export async function profile_page(){
 			try{
 				const photoURL = await FirebaseController.uploadProfilePhoto(photoProfile,Auth.currentUser.uid)
 				await FirebaseController.updateAccountInfo(Auth.currentUser.uid,{photoURL})
+				
 				setProfileIcon(photoURL)
 				Util.popupInfo("Success","Profile Photo Updated")
 			}catch(e){

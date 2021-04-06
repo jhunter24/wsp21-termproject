@@ -22,8 +22,10 @@ export async function admin_page(){
 
 let html = '<h1>Admin Page</h1>'
 let users;
-try{users = await FirebaseController.getUserList()
 
+try{
+	users = await FirebaseController.getUserList()
+	
 	users.forEach(user =>{
 		html += buildUserCard(user);
 	})
@@ -78,7 +80,9 @@ for(let i = 0;i < deleteForms.length;i++){
 		const uid= e.target.uid.value
 
 	  try{
+		  await FirebaseController.deleteUserData(uid)
 		  await FirebaseController.deleteUser(uid);
+
 		  document.getElementById(`user-card-${uid}`).remove()
 		  Util.popupInfo('Successfully deleted', `${uid} was successfully removed from the userbase`)
 	  }catch(e){
@@ -98,7 +102,7 @@ for(let i = 0;i < deleteForms.length;i++){
 
 
 function buildUserCard(user){
-
+	
 	return `
   <div id="user-card-${user.uid}" class="card" style="width: 18rem; display: inline-block">
 	<img src="${
@@ -107,8 +111,7 @@ function buildUserCard(user){
 	<div class="card-body">
 	  <h5 class="card-title">${user.email}</h5>
 	  <p class="card-text">
-	  	Name: ${user.displayName} <br>
-		Phone Number: ${user.phoneNumber} <br>
+		
 		Status:<span id="status-${user.uid}"> ${
     user.disabled ? "Disabled" : "Active"
   }</span>

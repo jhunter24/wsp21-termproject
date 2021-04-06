@@ -21,3 +21,27 @@ export const menuShoppingcart = document.getElementById("menu-button-shoppingcar
 
 export const modalTransactionTitle = document.getElementById("modal-transaction-title")
 export const modalTransactionBody = document.getElementById("modal-transaction-body")
+
+
+
+
+export const formEditProduct = document.getElementById("form-edit-product");
+export const formEditImageTag = document.getElementById("form-edit-image-tag");
+export const formEditImageFileButton = document.getElementById("form-edit-image-button");
+export const formEditProductError = {
+  name: document.getElementById("error-edit-name"),
+  price: document.getElementById("error-edit-price"),
+  summary: document.getElementById("error-edit-summary"),
+};
+
+
+export const formAddProduct = document.getElementById("form-add-product");
+export const formAddProductError = {
+  name: document.getElementById("error-add-name"),
+  price: document.getElementById("error-add-price"),
+  summary: document.getElementById("error-add-summary"),
+  image: document.getElementById("error-add-image"),
+};
+
+export const imageTagAddProduct = document.getElementById("form-add-image-tag");
+export const formImageAddButton = document.getElementById("form-add-image-button");

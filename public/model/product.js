@@ -39,4 +39,40 @@ export class Product{
 
 		return true
 	}
+
+	serializeForUpdate() {
+		const p = {};
+		if (this.name) p.name = this.name;
+		if (this.price) p.price = this.price;
+		if (this.summary) p.summary = this.summary;
+		if (this.imageName) p.imageName = this.imageName;
+		if (this.imageURL) p.imageURL = this.imageURL;
+	
+	
+		return p;
+	  }
+
+
+validate(image) {
+    const errors = {};
+    if (!this.name || this.name.length < 2) {
+      errors.name = "Product name should be min 2 chars";
+    }
+    if (!this || !Number(this.price)) {
+      errors.price = "Price is not valid";
+    }
+    if (!this.summary || this.summary.length < 5) {
+      errors.summary = "Summary too short. Min 5 chars";
+    }
+    if (!image) {
+      errors.image = "image not selected";
+    }
+
+    if (Object.keys(errors).length == 0) {
+      return null;
+    } else {
+      return errors;
+    }
+  }
+
 }

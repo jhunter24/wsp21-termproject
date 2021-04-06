@@ -59,7 +59,65 @@
         </div>
     </nav>
 
-
+ <!-- Modal Add Product-->
+ <div
+ class="modal fade"
+ id="modal-add-product"
+ data-bs-backdrop="static"
+ data-bs-keyboard="false"
+ tabindex="-1"
+ aria-labelledby="staticBackdropLabel"
+ aria-hidden="true"
+>
+ <div class="modal-dialog">
+   <div class="modal-content">
+	 <div class="modal-header">
+	   <h5 class="modal-title" id="modal-add-product-label">
+		 Add New Product
+	   </h5>
+	   <button
+		 type="button"
+		 class="btn-close"
+		 data-dismiss="modal"
+		 aria-label="Close"
+	   >
+		 <span aria-hidden="true">&times;</span>
+	   </button>
+	 </div>
+	 <div class="modal-body">
+	   <form id="form-add-product" method="post">
+		 <div>
+		   <input type="text" name="name" placeholder="Product Name" />
+		   <p id="error-add-name" class="error-add-product"></p>
+		 </div>
+		 <div>
+		   <input type="text" name="price" placeholder="price ($)" />
+		   <p id="error-add-price" class="error-add-product"></p>
+		 </div>
+		 <div>
+		   Summary:<br />
+		   <textarea name="summary"> </textarea>
+		   <p id="error-add-summary" class="error-add-product"></p>
+		 </div>
+		 <div>
+		   Image:<input
+			 id="form-add-image-button"
+			 type="file"
+			 value="upload"
+		   />
+		   <img id="form-add-image-tag" style="display: block" />
+		   <p id="error-add-image" class="error-add-product"></p>
+		 </div>
+		 <div>
+		   <button type="submit" class="btn btn-outline-primary">
+			 Add
+		   </button>
+		 </div>
+	   </form>
+	 </div>
+   </div>
+ </div>
+</div>
 
     <!-- Modal: sign in  -->
     <div class="modal fade" id="modal-form-signin" data-backdrop="static" data-keyboard="false" tabindex="-1"
@@ -151,7 +209,62 @@
 	  </div>
 	</div>
   </div>
+ 
+  
 
+  <!-- Edit Modal -->
+  <div
+  class="modal fade"
+  id="modal-edit-product"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<h5 class="modal-title" id="modal-edit-product-label">
+		  Update Product
+		</h5>
+		<button
+		  type="button"
+		  class="btn btn-close"
+		  data-dismiss="modal"
+		  aria-label="Close"
+		>
+		  <span aria-hidden="true">&times;</span>
+		</button>
+	  </div>
+	  <div class="modal-body">
+		<form id="form-edit-product" method="post">
+		  <input type="hidden" name="docId" />
+		  <input type="hidden" name="imageName" />
+		  <div>Name: <input type="text" name="name" /></div>
+		  <p id="error-edit-name" class="error-edit-product"></p>
+		  <div>
+			Price: <input type="text" name="price" />
+			<p id="error-edit-price" class="error-edit-product"></p>
+		  </div>
+		  <div>
+			Summary: <br /><textarea name="summary"></textarea>
+			<p id="error-edit-summary" class="error-edit-product"></p>
+		  </div>
+		  <div>
+			<img id="form-edit-image-tag" style="display: block" />
+			<input type="file" id="form-edit-image-button" value="upload" />
+		  </div>
+		  <div>
+			<button type="submit" class="btn btn-outline-primary">
+			  Update
+			</button>
+		  </div>
+		</form>
+	  </div>
+	</div>
+  </div>
+</div>
 
 
   <div id="main-content" class="jumbotron"></div>

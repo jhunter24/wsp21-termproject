@@ -32,3 +32,7 @@ import * as AdminPage from "./viewpage/admin_page.js"
 AdminPage.addEventListeners();
 import * as AdminProductsPage from "./viewpage/admin_products_page.js"
 AdminProductsPage.addEventListeners();
+import * as Edit from "./controller/edit_product.js"
+Edit.addEventListeners();
+import * as Add from "./controller/add_product.js"
+Add.addEventListeners();

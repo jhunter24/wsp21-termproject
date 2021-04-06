@@ -128,8 +128,8 @@ async function updateUser(data,context){
 }
 
 
-
-async function deleteUsersData(uid){
+exports.admin_deleteUserData = functions.https.onCall(deleteUsersData)
+async function deleteUsersData(uid,context){
 	if (!isAdmin(context.auth.token.email)) {
 		if (Constant.DEV) console.log("not admin", context.auth.token.email);
 		throw new functions.https.HttpsError(
@@ -141,7 +141,7 @@ async function deleteUsersData(uid){
 	await admin.firestore().collection(Constant.collectionNames.ACCOUNT_INFO).doc(uid).delete()
 	let snapShot = await admin.firestore().collection(Constant.collectionNames.PURCHASE_HISTORY).where('uid','==', uid).get()
 	snapShot.forEach(doc =>{
-		admin.firestore().doc(doc.id).delete()
+		admin.firestore().collection(Constant.collectionNames.PURCHASE_HISTORY).doc(doc.id).delete()
 	})}catch(e){
 		if (Constant.DEV) console.log(e);
 		throw new functions.https.HttpsError("internal", "user data deletion failure");
@@ -160,7 +160,7 @@ async function deleteUser(uid,context){
 		);
 	}
 	try{
-	//await deleteUsersData(uid);
+	
 	await admin.auth().deleteUser(uid);
 	}catch(e){
 		if (Constant.DEV) console.log(e);
@@ -168,4 +168,120 @@ async function deleteUser(uid,context){
 	}
 }
 
+exports.admin_getProductById = functions.https.onCall(getProductById)
+async function getProductById(docId, context) {
+	if (!isAdmin(context.auth.token.email)) {
+	  if (Constant.DEV) console.log("not admin", context.auth.token.email);
+	  throw new functions.https.HttpsError(
+		"unauthenticated",
+		"Only admin can invoke this function"
+	  );
+	}
+  
+	try {
+	  const doc = await admin
+		.firestore()
+		.collection(Constant.collectionNames.PRODUCTS)
+		.doc(docId)
+		.get();
+  
+	  if (doc.exists) {
+		const { name, summary, price, imageName, imageURL } = doc.data();
+  
+		const p = { name, price, summary, imageName, imageURL };
+  
+		p.docId = doc.id;
+  
+		return p;
+	  } else {
+		return null;
+	  }
+	} catch (e) {
+	  if (Constant.DEV) console.log(e);
+	  throw new functions.https.HttpsError(
+		"internal",
+		"get product by id failed"
+	  );
+	}
+  }
+  exports.admin_getProductById = functions.https.onCall(getProductById)
+  async function getProductById(docId, context) {
+	if (!isAdmin(context.auth.token.email)) {
+	  if (Constant.DEV) console.log("not admin", context.auth.token.email);
+	  throw new functions.https.HttpsError(
+		"unauthenticated",
+		"Only admin can invoke this function"
+	  );
+	}
+  
+	try {
+	  const doc = await admin
+		.firestore()
+		.collection(Constant.collectionNames.PRODUCTS)
+		.doc(docId)
+		.get();
+  
+	  if (doc.exists) {
+		const { name, summary, price, imageName, imageURL } = doc.data();
+  
+		const p = { name, price, summary, imageName, imageURL };
+  
+		p.docId = doc.id;
+  
+		return p;
+	  } else {
+		return null;
+	  }
+	} catch (e) {
+	  if (Constant.DEV) console.log(e);
+	  throw new functions.https.HttpsError(
+		"internal",
+		"get product by id failed"
+	  );
+	}
+  }
 
+  exports.admin_updateProduct = functions.https.onCall(updateProduct);
+async function updateProduct(productInfo, context) {
+  //product info = {docId, productUpdate}
+
+  if (!isAdmin(context.auth.token.email)) {
+    if (Constant.DEV) console.log("not admin", context.auth.token.email);
+    throw new functions.https.HttpsError(
+      "unauthenticated",
+      "Only admin can invoke this function"
+    );
+  }
+
+  try {
+    await admin
+      .firestore()
+      .collection(Constant.collectionNames.PRODUCTS)
+      .doc(productInfo.docId)
+      .update(productInfo.data);
+  } catch (e) {
+    if (Constant.DEV) console.log(e);
+    throw new functions.https.HttpsError("internal", "update product failed");
+  }
+}
+
+exports.admin_addProduct = functions.https.onCall(addProduct)
+async function addProduct(data, context) {
+	if (!isAdmin(context.auth.token.email)) {
+	  if (Constant.DEV) console.log("not admin", context.auth.token.email);
+	  throw new functions.https.HttpsError(
+		"unauthenticated",
+		"Only admin can invoke this function"
+	  );
+	}
+	//assuming data uses object
+	try {
+	  await admin
+		.firestore()
+		.collection(Constant.collectionNames.PRODUCTS)
+		.add(data);
+	} catch (e) {
+	  if (Constant.DEV) console.log(e);
+	  throw new functions.https.HttpsError("internal", "addProduct failed");
+	}
+  }
