@@ -4,7 +4,7 @@ export class ShoppingCart{
 
 	constructor(uid){
 		this.uid = uid;
-		this.items // array of serialized products
+		this.items = []// array of serialized products
 	}
 
 	addItem(product){

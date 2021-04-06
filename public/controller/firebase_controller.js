@@ -34,11 +34,9 @@ export async function getProductList() {
 }
 
 export async function checkOut(cart) {
-  const data = cart.serialize(Date.now());
-  await firebase
-    .firestore()
-    .collection(Constant.collectionName.PURCHASE_HISTORY)
-    .add(data);
+	
+  const data = cart.serialize(Date.now())
+  await firebase.firestore().collection(Constant.collectionName.PURCHASE_HISTORY).add(data);
 }
 
 export async function getPurchaseHistroy(uid) {

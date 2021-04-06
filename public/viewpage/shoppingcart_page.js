@@ -4,7 +4,8 @@ import * as Auth from "../controller/auth.js"
 import * as HomePage from "./home_page.js"
 import * as Util from "./util.js"
 import * as FirebaseController from "../controller/firebase_controller.js"
-import * as Constant from "../model/constant.js"
+import * as ConfirmationPage from "./confirmation_page.js"
+
 export function addEventListeners(){
 	Element.menuShoppingcart.addEventListener('click', ()=>{
 
@@ -78,20 +79,13 @@ export function shoppingcart_page(){
 	const checkOutButton = document.getElementById("button-checkout")
 	document.getElementById("button-checkout").addEventListener('click', async ()=>{
 		let label = Util.disableButton(checkOutButton)
-		try{
-
-			await FirebaseController.checkOut(cart)
-			Util.popupInfo('Success','Checkout complete')
-			window.localStorage.removeItem(`cart-${Auth.currentUser.uid}`)
-			cart.empty()
-
-			Element.shoppingcartCount.innerHTML = '0'
-			history.pushState(null,null,Routes.routePathname.HOME)
-			await HomePage.home_page();
-		}catch(e){
-			if(Constant.DEV) console.log(e)
-			Util.popupInfo('Checkout Error',JSON.stringify(e))
-		}
+		
+		
+		await ConfirmationPage.confirmation_page(cart)
+			
+			
+			
+		
 		Util.enableButton(checkOutButton,label)
 	})
 

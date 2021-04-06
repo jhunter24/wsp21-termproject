@@ -89,7 +89,7 @@ function buildProductCard(product,index) {
   return `
 		
 		<div class="card" style="width: 18rem; display: inline-block;">
-			<img src="${product.imageURL}" class="card-img-top">
+			<img src="${product.imageURL}" height="400px" class="card-img-top">
 			<div class="card-body">
 		 	 <h5 class="card-title">${product.name}</h5>
 		 	 <p class="card-text">

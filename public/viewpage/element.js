@@ -45,3 +45,4 @@ export const formAddProductError = {
 
 export const imageTagAddProduct = document.getElementById("form-add-image-tag");
 export const formImageAddButton = document.getElementById("form-add-image-button");
+
