@@ -82,7 +82,44 @@ export async function home_page() {
 	
   }
 
+  const commentForms = document.getElementsByClassName('form-comment')
+  for(let i = 0;i<commentForms.length;i++){
+	  commentForms[i].addEventListener('submit', async (e)=>{
+		e.preventDefault()
+		// Element.commentBody.innerHTML = ''
+		// let commentId = e.target.commentId
+		// let comments = await FirebaseController.getComments(commentId)
 
+		// let html = `
+		// <table class="table table-striped">
+		// 	<tbody>
+		// `
+		// comments.forEach(c =>{
+		// 	html+= buildCommentTable(c)
+		// })
+
+		// html += `
+		// </tbody>
+	    // </table>`
+
+
+		Element.commentBody.innerHTML = html
+		$('#comment-modal').modal('show')
+	  })
+  }
+
+
+}
+
+function buildCommentTable(comment){
+	return `
+		<tr>
+			<td>${(comment.recommend == true ? 'Recommended' : 'Not Recommended')}</td>
+			<td>${comment.timeStamp}</td>
+			<td>${comment.commentor}</td>
+			<td>${comment.body}</td>
+		</tr>
+	`
 }
 
 function buildProductCard(product,index) {
@@ -108,6 +145,12 @@ function buildProductCard(product,index) {
 					<input type="hidden" name="index" value="${index}">
 					<button class="btn btn-outline-danger" type="submit">&plus;</button>
 				</form>
+			  </div>
+			  <div>
+			 	<form class="form-comment">
+				 	<input type="hidden" name="commentId" value="${product.docId}">
+					<button class="btn btn-outline-primary">Comment</button>
+				</form> 
 			  </div>
 			</div>
 	  </div>

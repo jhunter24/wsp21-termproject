@@ -46,3 +46,6 @@ export const formAddProductError = {
 export const imageTagAddProduct = document.getElementById("form-add-image-tag");
 export const formImageAddButton = document.getElementById("form-add-image-button");
 
+export const commentTitle = document.getElementById('comment-modal-title')
+export const commentBody = document.getElementById('comment-modal-title')
+export const commentModal = document.getElementById('comment-modal')

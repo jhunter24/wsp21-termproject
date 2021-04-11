@@ -174,3 +174,22 @@ export async function uploadImage(imageFile, imageName) {
 export async function addProduct(product) {
   await cf_addProduct(product.serialize());
 }
+
+
+export async function getComments(productId){
+	let snapShot = await firebase.firestore().collection(Constant.collectionName.COMMENTS).where('productId', '==', productId).get()
+	let c = []
+	snapShot.forEach(doc =>{
+		let comment = Comment(doc.data())
+		comment.docId = doc.id
+		c.push(comment)
+	})
+
+	return c;
+}
+
+export async function storeComment(comment){
+	comment.timeStamp = Date.now()
+	await firebase.firestore().add(comment.serialize())
+
+}
