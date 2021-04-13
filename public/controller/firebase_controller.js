@@ -225,6 +225,3 @@ export async function getProductByIdUser(docId){
 	
 }
 
-export function getUser(uid){
-	return firebase.auth().currentUser
-}

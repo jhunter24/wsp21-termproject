@@ -13,11 +13,10 @@ export async function comment_page(productId) {
   );
   let comments;
   let product;
- 
+
   try {
     comments = await FirebaseController.getComments(productId);
     product = await FirebaseController.getProductByIdUser(productId);
-    
   } catch (e) {
     if (Constant.DEV) console.log(e);
   }
@@ -84,10 +83,10 @@ export async function comment_page(productId) {
 
 function buildCommentTable(comment, userInfo,currentUser) {
 	let rec
-	if(comment.recommend) rec = 'Yes'
+	if(comment.recommend || comment.recommend == 'true') rec = 'Yes'
 	else rec= 'No'
 	let name
-	if(userInfo.name == '') name= FirebaseController.getUser(comment.commentor).email 
+	if(userInfo.name == '') name= 'n/a'
 	else name = userInfo.name
 
   let html = `
@@ -113,7 +112,7 @@ function buildCommentTable(comment, userInfo,currentUser) {
 					</form>
 				</td>
 			</tr>`;
-  }else if(FirebaseController.isAdmin(Auth.currentUser.email)){
+  }else if(Auth.adminCheck(currentUser.email)){
 	  html+=`<td>
 	 		<form class="form-delete-comment" method="post">
 			 	<input type="hidden" name="commentId" value="${comment.docId}">

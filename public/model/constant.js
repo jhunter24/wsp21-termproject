@@ -13,3 +13,6 @@ export const storageFolderName = {
 	PROFILE_PHOTOS: 'profile_photos/',
 	PRODUCT_IMAGES: "product_images/"
 }
+
+
+export const adminEmails = ['admin@test.com','super@test.com']
