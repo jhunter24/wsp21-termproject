@@ -5,7 +5,7 @@ import * as ShoppingCart  from "../viewpage/shoppingcart_page.js"
 import * as AdminProductPage from "../viewpage/admin_products_page.js"
 import * as AdminPage from "../viewpage/admin_page.js"
 import * as ConfirmationPage from "../viewpage/confirmation_page.js"
-
+import * as CommentPage from "../viewpage/comment_page.js"
 export const routePathname = {
     HOME: '/',
     PURCHASES: '/purchase',
@@ -13,7 +13,8 @@ export const routePathname = {
 	SHOPPINGCART: '/shoppingcart',
 	ADMIN: '/adminpage',
 	ADMINPRODUCTS: '/adminProductsPage',
-	CONFIRMATION: '/confirmation'
+	CONFIRMATION: '/confirmation',
+	COMMENTS: '/comment'
 }
 
 export const routes = [
@@ -23,12 +24,20 @@ export const routes = [
 	{pathname: routePathname.SHOPPINGCART, page:ShoppingCart.shoppingcart_page},
 	{pathname: routePathname.ADMINPRODUCTS, page:AdminProductPage.admin_products_page},
 	{pathname: routePathname.ADMIN,page:AdminPage.admin_page},
-	{pathname: routePathname.CONFIRMATION, page: ConfirmationPage.confirmation_page}
+	{pathname: routePathname.CONFIRMATION, page: ConfirmationPage.confirmation_page},
+	{pathname: routePathname.COMMENTS, page: CommentPage.comment_page}
 ]
 
 
-export function routing(path){
+export function routing(path,href){
+	const commentIndex = href.indexOf(routePathname.COMMENTS)
+	let uri;
+	if(commentIndex > 0){
+		const len = routePathname.COMMENTS.length
+		uri = href.substr(commentIndex+len+1)
+	}
+
 	const route = routes.find( r=> r.pathname == path)
-	if(route) route.page()
+	if(route) route.page(uri)
     else routes[0].page()
 }

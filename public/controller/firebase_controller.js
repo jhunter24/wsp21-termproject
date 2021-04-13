@@ -2,6 +2,7 @@ import { Product } from "../model/product.js";
 import * as Constant from "../model/constant.js";
 import { ShoppingCart } from "../model/shoppingcart.js";
 import { AccountInfo } from "../model/account_info.js";
+import { Comment } from "../model/comment.js";
 
 const cf_isAdmin = firebase.functions().httpsCallable("isAdmin");
 export async function isAdmin(email) {
@@ -34,9 +35,11 @@ export async function getProductList() {
 }
 
 export async function checkOut(cart) {
-	
-  const data = cart.serialize(Date.now())
-  await firebase.firestore().collection(Constant.collectionName.PURCHASE_HISTORY).add(data);
+  const data = cart.serialize(Date.now());
+  await firebase
+    .firestore()
+    .collection(Constant.collectionName.PURCHASE_HISTORY)
+    .add(data);
 }
 
 export async function getPurchaseHistroy(uid) {
@@ -114,7 +117,9 @@ export async function deleteUser(uid) {
   await cf_deleteUser(uid);
 }
 
-const cf_deleteProduct = firebase.functions().httpsCallable("admin_deleteProduct");
+const cf_deleteProduct = firebase
+  .functions()
+  .httpsCallable("admin_deleteProduct");
 export async function deleteProduct(docId, imageName) {
   await cf_deleteProduct(docId);
   const ref = firebase
@@ -124,14 +129,21 @@ export async function deleteProduct(docId, imageName) {
   await ref.delete();
 }
 
-
-const cf_deleteUserData = firebase.functions().httpsCallable("admin_deleteUserData")
-export async function deleteUserData(uid){
-	await cf_deleteUserData(uid)
-	await firebase.firestore().collection(Constant.storageFolderName.PROFILE_PHOTOS).doc(uid).delete()
+const cf_deleteUserData = firebase
+  .functions()
+  .httpsCallable("admin_deleteUserData");
+export async function deleteUserData(uid) {
+  await cf_deleteUserData(uid);
+  await firebase
+    .firestore()
+    .collection(Constant.storageFolderName.PROFILE_PHOTOS)
+    .doc(uid)
+    .delete();
 }
 
-const cf_getProductById = firebase.functions().httpsCallable("admin_getProductById");
+const cf_getProductById = firebase
+  .functions()
+  .httpsCallable("admin_getProductById");
 export async function getProductById(docId) {
   const results = await cf_getProductById(docId);
 
@@ -145,8 +157,9 @@ export async function getProductById(docId) {
   }
 }
 
-
-const cf_updateProduct = firebase.functions().httpsCallable("admin_updateProduct");
+const cf_updateProduct = firebase
+  .functions()
+  .httpsCallable("admin_updateProduct");
 export async function updateProduct(product) {
   const docId = product.docId;
   const data = product.serializeForUpdate();
@@ -154,42 +167,64 @@ export async function updateProduct(product) {
 }
 
 export async function uploadImage(imageFile, imageName) {
-	if (!imageName) {
-	  imageName = Date.now() + imageFile.name;
-	}
-  
-	const ref = firebase
-	  .storage()
-	  .ref()
-	  .child(Constant.storageFolderName.PRODUCT_IMAGES + imageName);
-  
-	const taskSnapshot = await ref.put(imageFile);
-	const imageURL = await taskSnapshot.ref.getDownloadURL();
-	return { imageName, imageURL };
+  if (!imageName) {
+    imageName = Date.now() + imageFile.name;
   }
 
+  const ref = firebase
+    .storage()
+    .ref()
+    .child(Constant.storageFolderName.PRODUCT_IMAGES + imageName);
 
+  const taskSnapshot = await ref.put(imageFile);
+  const imageURL = await taskSnapshot.ref.getDownloadURL();
+  return { imageName, imageURL };
+}
 
-  const cf_addProduct = firebase.functions().httpsCallable("admin_addProduct");
+const cf_addProduct = firebase.functions().httpsCallable("admin_addProduct");
 export async function addProduct(product) {
   await cf_addProduct(product.serialize());
 }
 
+export async function getComments(productId) {
+  const snapShot = await firebase
+    .firestore()
+    .collection(Constant.collectionName.COMMENTS)
+    .where("productId", "==", productId)
+    .orderBy("timestamp", "desc")
+    .get();
+  let c = [];
+  snapShot.forEach((doc) => {
+    let comment = Comment.deserialize(doc.data())
+    comment.docId = doc.id;
+	
+    c.push(comment);
+  });
 
-export async function getComments(productId){
-	let snapShot = await firebase.firestore().collection(Constant.collectionName.COMMENTS).where('productId', '==', productId).get()
-	let c = []
-	snapShot.forEach(doc =>{
-		let comment = Comment(doc.data())
-		comment.docId = doc.id
-		c.push(comment)
-	})
-
-	return c;
+  return c;
 }
 
-export async function storeComment(comment){
-	comment.timeStamp = Date.now()
-	await firebase.firestore().add(comment.serialize())
+export async function storeComment(comment) {
+	const data = comment.serialize(Date.now())
 
+	await firebase.firestore().collection(Constant.collectionName.COMMENTS).add(data);
+}
+
+
+export async function deleteComment(commentId){
+	await firebase.firestore().collection(Constant.collectionName.COMMENTS).doc(commentId).delete()
+}
+
+export async function updateComment(comment){
+	await firebase.firestore().collection(Constant.collectionName.COMMENTS).doc(comment.docId).update(comment.serializeForUpdate())
+}
+
+export async function getProductByIdUser(docId){
+	const doc = await firebase.firestore().collection(Constant.collectionName.PRODUCTS).doc(docId).get()
+		return new Product(doc.data())
+	
+}
+
+export function getUser(uid){
+	return firebase.auth().currentUser
 }

@@ -266,47 +266,108 @@
   </div>
 </div>
 
-<!-- Modal: comment section -->
-<div class="modal fade" id="comment-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-scrollable">
-	  <div class="modal-content">
-		<div class="modal-header">
-		  <h5 class="modal-title" id="comment-modal-title"></h5>
-		  <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span></button>
+
+<!-- Modal Add COmment-->
+<div
+class="modal fade"
+id="modal-add-comment"
+data-bs-backdrop="static"
+data-bs-keyboard="false"
+tabindex="-1"
+aria-labelledby="staticBackdropLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+  <div class="modal-content">
+	<div class="modal-header">
+	  <h5 class="modal-title" id="modal-add-comment-label">
+		Add New Product
+	  </h5>
+	  <button
+		type="button"
+		class="btn-close"
+		data-dismiss="modal"
+		aria-label="Close"
+	  >
+		<span aria-hidden="true">&times;</span>
+	  </button>
+	</div>
+	<div class="modal-body">
+	  <form id="form-add-comment" method="post">
+		<input type="hidden" id="commentorUID" name="commentor" value="">
+		<input type="hidden" id="commentProductId" name="productId" value="">
+		<div>
+			<input type="radio" id="recommended" name="recommend" value="true">
+			<label for="recommended">Recommend</label>
+			<input type="radio" id="notRecommend" name="recommend" value="false">
+			<label for="notRecommend">Not Recommended</label>
 		</div>
-		<div class="modal-body" id="comment-modal-body">
-		
+		<div>
+		  Message:<br />
+		  <textarea name="body"> </textarea>
+	
 		</div>
-		<div class="modal-footer">
-		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-		  <button type="button" class="btn btn-primary">Understood</button>
+		<div>
+		  <button type="submit" class="btn btn-outline-primary">
+			Add
+		  </button>
 		</div>
-	  </div>
+	  </form>
 	</div>
   </div>
+</div>
+</div>
 
-
-  <!-- Modal -->
-<div class="modal fade" id="new-comment-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-	<div class="modal-dialog">
-	  <div class="modal-content">
-		<div class="modal-header">
-		  <h5 class="modal-title" id="staticBackdropLabel">New comment</h5>
-		  <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span></button>
+<!-- Modal Add COmment-->
+<div
+class="modal fade"
+id="modal-edit-comment"
+data-bs-backdrop="static"
+data-bs-keyboard="false"
+tabindex="-1"
+aria-labelledby="staticBackdropLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+  <div class="modal-content">
+	<div class="modal-header">
+	  <h5 class="modal-title" id="modal-edit-comment-label">
+		Add New Product
+	  </h5>
+	  <button
+		type="button"
+		class="btn-close"
+		data-dismiss="modal"
+		aria-label="Close"
+	  >
+		<span aria-hidden="true">&times;</span>
+	  </button>
+	</div>
+	<div class="modal-body">
+	  <form id="form-edit-comment" method="post">
+			<input type="hidden"  name="commentId" value="">
+			<input type="hidden"  name="productId" value="">
+		<div>
+			<input type="radio" id="editRecommended" name="recommend" value="true">
+			<label for="recommended">Recommend</label>
+			<input type="radio" id="editNotRecommend" name="recommend" value="false">
+			<label for="notRecommend">Not Recommended</label>
 		</div>
-		<div class="modal-body" id="new-comment-body">
-			
-			
-		  
+		<div>
+		  Message:<br />
+		  <textarea name="body"> </textarea>
+	
 		</div>
-		<div class="modal-footer">
-		  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-		  <button type="button" class="btn btn-primary">Understood</button>
+		<div>
+		  <button type="submit" class="btn btn-outline-primary">
+			Update
+		  </button>
 		</div>
-	  </div>
+	  </form>
 	</div>
   </div>
-
+</div>
+</div>
 
   <div id="main-content" class="jumbotron"></div>
     <!-- update the version number as needed -->

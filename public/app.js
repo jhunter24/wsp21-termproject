@@ -38,4 +38,7 @@ import * as Edit from "./controller/edit_product.js"
 Edit.addEventListeners();
 import * as Add from "./controller/add_product.js"
 Add.addEventListeners();
-
+import * as CommentAdd from "./controller/add_comment.js"
+CommentAdd.addEventListeners()
+import * as CommentEdit from "./controller/edit_comment.js"
+CommentEdit.addEventListeners()
