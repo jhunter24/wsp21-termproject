@@ -1,6 +1,6 @@
 {
   "hosting": {
-	  "site": "termpproject-s2-dadadadada",
+	  "site": "termpproject-s3-dadadadada",
     "public": "public",
     "ignore": [
       "firebase.json",

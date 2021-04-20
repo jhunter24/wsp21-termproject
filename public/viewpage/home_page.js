@@ -18,12 +18,17 @@ export function addEventListeners() {
 }
 
 let products;
+let productPages
 export let wishlist;
 export let cart;
-export async function home_page() {
-  let html = `<h1>Home Page</h1>
-  `;
 
+let currentPage
+export async function home_page(page = 0) {
+  currentPage = page
+	let html = `<h1>Home Page</h1> <div> <form id="buttonForm">${pageButtons()}</form></div>
+  
+  `;
+  
   //if signed in make a new cart
   //if(Auth.currentUser){
   //	  cart = new ShoppingCart(Auth.currentUser.uid);
@@ -32,6 +37,7 @@ export async function home_page() {
 
   try {
     products = await FirebaseController.getProductList();
+	productPages = await FirebaseController.getProductListByPagination()
     if (cart && cart.items) {
       cart.items.forEach((item) => {
         const product = products.find((p) => {
@@ -42,7 +48,8 @@ export async function home_page() {
     }
 
     let index = 0;
-    products.forEach((product) => {
+	
+    productPages[currentPage].forEach((product) => {
       html += buildProductCard(product, index);
       ++index;
     });
@@ -52,31 +59,38 @@ export async function home_page() {
     return;
   }
 
-  html+=`
-  		
-  		<form class="float-left">
-		  <button class="btn btn-outline-info">
-		  	<span>&#8592;</span>
-		  </button>
-		</form>
-		<form class="float-right">
-			<button class="btn btn-outline-info">
-				<span>&#8594;</span>
-			</button>
-		</form>
-	 
-  `
-
+  
+  
   Element.mainContent.innerHTML = html;
 
+
   //event listeners
+
+  document.getElementById("buttonForm").addEventListener('submit', async (e)=>{
+	  e.preventDefault()
+	  const buttonLabel = e.target.submitter
+	  const buttons = e.target.getElementsByTagName('button')
+
+	  if(buttonLabel == 'Next'){
+		  if(currentPage == productPages.length-1) return
+		  currentPage++
+		  await home_page(currentPage)
+	  }else if(buttonLabel == 'Prev'){
+		if(currentPage == 0)return
+		currentPage--
+		await home_page(currentPage)
+	  }
+
+
+  })
+
 
   const plusForms = document.getElementsByClassName("form-increase-qty");
   for (let i = 0; i < plusForms.length; i++) {
     plusForms[i].addEventListener("submit", (e) => {
       e.preventDefault();
 
-      const p = products[e.target.index.value];
+      const p = productPages[currentPage][e.target.index.value];
       cart.addItem(p);
       document.getElementById(`qty-${p.docId}`).innerHTML = p.qty;
 
@@ -89,7 +103,7 @@ export async function home_page() {
     minusForms[i].addEventListener("submit", (e) => {
       e.preventDefault();
 
-      const p = products[e.target.index.value];
+      const p = productPages[currentPage][e.target.index.value];
       cart.removeItem(p);
       document.getElementById(`qty-${p.docId}`).innerHTML =
         p.qty == null || p.qty == 0 ? "Add" : p.qty;
@@ -113,7 +127,7 @@ export async function home_page() {
 	for(let i = 0;i<wishlistForm.length;i++){
 		wishlistForm[i].addEventListener("submit",async (e)=>{
 			e.preventDefault()
-			let p = products[e.target.index.value]
+			let p = productPages[currentPage][e.target.index.value]
 			wishlist.addItem(p)
 			await FirebaseController.updateWishlist(Auth.currentUser.uid,wishlist);
 		})
@@ -189,3 +203,10 @@ export function getShoppingCartFromLocalStorage() {
 export async function getWishlist(){
 	wishlist = await FirebaseController.getWishlist(Auth.currentUser.uid)
 }
+
+function pageButtons(){
+	return `
+		<button onclick="this.form.submitter='Prev'" type="submit" class="btn btn-outline-info">Prev</button>
+		<button onclick="this.form.submitter='Next'" type="submit" class="btn btn-outline-info">Next</button>
+	`
+} 

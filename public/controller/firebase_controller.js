@@ -22,19 +22,56 @@ export async function signOut() {
 export async function getProductList() {
   let products = [];
 
-  const snapShot = await firebase
-    .firestore()
-    .collection(Constant.collectionName.PRODUCTS)
-    .orderBy("name")
-    .get();
+   const snapShot = await firebase
+     .firestore()
+     .collection(Constant.collectionName.PRODUCTS)
+     .orderBy("name")
+     .get();
 
-  snapShot.forEach((doc) => {
-    const p = new Product(doc.data());
-    p.docId = doc.id;
-    products.push(p);
+   snapShot.forEach((doc) => {
+     const p = new Product(doc.data());
+     p.docId = doc.id;
+     products.push(p);
   });
+
   return products;
 }
+
+export async function getProductListByPagination() {
+	let products = [];
+  
+	 const ref = await firebase
+	   .firestore()
+	   .collection(Constant.collectionName.PRODUCTS)
+	   .orderBy("name")
+	   .get();
+  
+  //   snapShot.forEach((doc) => {
+  //     const p = new Product(doc.data());
+  //     p.docId = doc.id;
+  //     products.push(p);
+  //   });
+	  let current = firebase.firestore().collection(Constant.collectionName.PRODUCTS).orderBy("name").limit(8)
+	  let last = 0
+	  while(last <= ref.docs.length && last != ref.docs.length){
+		  
+	  let snapShot = await current.get();
+		  let query = []
+		  snapShot.forEach(doc =>{
+			  let p = new Product(doc.data())
+			  p.docId = doc.id
+			  query.push(p)
+		  })
+		  products.push(query)
+		  last += 8
+		  let currentLast = snapShot.docs[snapShot.docs.length-1]
+		  current = await firebase.firestore().collection(Constant.collectionName.PRODUCTS).orderBy("name").startAfter(currentLast).limit(8)
+		  
+	  }
+  
+	return products;
+  }
+
 
 export async function checkOut(cart) {
   const data = cart.serialize(Date.now());
