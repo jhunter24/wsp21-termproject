@@ -18,7 +18,7 @@ export async function addEventListeners(){
 		let label = Util.disableButton(Element.menuButtonWishlist)
 		await wishlist_page()
 		Util.enableButton(Element.menuButtonWishlist,label)
-		getShoppingCart()
+		
 		
 		
 		
@@ -28,6 +28,7 @@ export async function addEventListeners(){
 let cart
 export async function wishlist_page(){
 	let wishlist = await FirebaseController.getWishlist(Auth.currentUser.uid);
+	cart =  HomePage.cart
 	let html = `<div class="row"><h1>Wishlist</h1></div>
 
 	<div class="row">
@@ -132,12 +133,12 @@ function buildTable(p){
 
 
 
-function getShoppingCart(){
-	const cartStr = window.localStorage.getItem(`cart-${Auth.currentUser.uid}`);
+// function getShoppingCart(){
+// 	const cartStr = window.localStorage.getItem(`cart-${Auth.currentUser.uid}`);
 
-  cart = ShoppingCart.parse(cartStr);
-  if (!cart || !cart.isValid() || Auth.currentUser.uid != cart.uid) {
-    window.localStorage.removeItem(`cart-${Auth.currentUser.uid}`);
-    cart = new ShoppingCart(Auth.currentUser.uid);
-  }
-}
+//   cart = ShoppingCart.parse(cartStr);
+//   if (!cart || !cart.isValid() || Auth.currentUser.uid != cart.uid) {
+//     window.localStorage.removeItem(`cart-${Auth.currentUser.uid}`);
+//     cart = new ShoppingCart(Auth.currentUser.uid);
+//   }
+// }
