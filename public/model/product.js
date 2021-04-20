@@ -27,6 +27,18 @@ export class Product{
 
 	}
 
+	serializeForWishlist(){
+		return {
+			name: this.name,
+			price: this.price,
+			summary: this.summary,
+			imageName: this.imageName,
+			imageURL: this.imageURL,
+			qty: this.qty,
+			docId: this.docId
+		}
+	}
+
 
 	static isSerializedProduct(obj){
 		if(!obj.name || typeof obj.name != 'string') return false

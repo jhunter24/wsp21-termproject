@@ -42,3 +42,5 @@ import * as CommentAdd from "./controller/add_comment.js"
 CommentAdd.addEventListeners()
 import * as CommentEdit from "./controller/edit_comment.js"
 CommentEdit.addEventListeners()
+import * as WishListPage from "./viewpage/wishlist_page.js"
+WishListPage.addEventListeners()

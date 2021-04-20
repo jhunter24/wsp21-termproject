@@ -6,6 +6,7 @@ import * as Util from "./util.js";
 import * as Auth from "../controller/auth.js";
 import { ShoppingCart } from "../model/shoppingcart.js";
 import * as CommentPage from "./comment_page.js"
+import { Wishlist } from "../model/wishlist.js"
 
 export function addEventListeners() {
   Element.menuButtonHome.addEventListener("click", async () => {
@@ -17,14 +18,17 @@ export function addEventListeners() {
 }
 
 let products;
+export let wishlist;
 export let cart;
 export async function home_page() {
-  let html = `<h1>Home Page</h1>`;
+  let html = `<h1>Home Page</h1>
+  `;
 
   //if signed in make a new cart
   //if(Auth.currentUser){
   //	  cart = new ShoppingCart(Auth.currentUser.uid);
   //}
+	
 
   try {
     products = await FirebaseController.getProductList();
@@ -47,6 +51,21 @@ export async function home_page() {
     Util.popupInfo("get product list error", JSON.stringify(e));
     return;
   }
+
+  html+=`
+  		
+  		<form class="float-left">
+		  <button class="btn btn-outline-info">
+		  	<span>&#8592;</span>
+		  </button>
+		</form>
+		<form class="float-right">
+			<button class="btn btn-outline-info">
+				<span>&#8594;</span>
+			</button>
+		</form>
+	 
+  `
 
   Element.mainContent.innerHTML = html;
 
@@ -89,6 +108,16 @@ export async function home_page() {
 	 
      
     });
+
+	const wishlistForm = document.getElementsByClassName("form-wishlist")
+	for(let i = 0;i<wishlistForm.length;i++){
+		wishlistForm[i].addEventListener("submit",async (e)=>{
+			e.preventDefault()
+			let p = products[e.target.index.value]
+			wishlist.addItem(p)
+			await FirebaseController.updateWishlist(Auth.currentUser.uid,wishlist);
+		})
+	}
   }
 
   
@@ -125,10 +154,20 @@ function buildProductCard(product, index) {
 				</form>
 			  </div>
 			  <div>
-			 	<form class="form-comment">
+			 	<form class="form-comment float-left" method="post">
 				 	<input type="hidden" name="commentId" value="${product.docId}">
 					<button class="btn btn-outline-primary">Comment</button>
 				</form> 
+				</div>
+				<div class="${Auth.currentUser ? "d-block" : "d-none"}">
+				<form class="form-wishlist float-right" method="post">
+					<input type="hidden" name="index" value="${index}">
+					<input type="hidden" name="productId" value="${product.docId}">
+					<button class="btn btn-outline-primary" type="submit">
+						<img src="images/addtowish.jpg" width="30px" height="30px">
+					</button>
+				</form>
+				</div>
 			  </div>
 			</div>
 	  </div>
@@ -145,4 +184,8 @@ export function getShoppingCartFromLocalStorage() {
   }
 
   Element.shoppingcartCount.innerHTML = cart.getTotalQty();
+}
+
+export async function getWishlist(){
+	wishlist = await FirebaseController.getWishlist(Auth.currentUser.uid)
 }

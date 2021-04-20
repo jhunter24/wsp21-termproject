@@ -3,6 +3,8 @@ import * as Constant from "../model/constant.js";
 import { ShoppingCart } from "../model/shoppingcart.js";
 import { AccountInfo } from "../model/account_info.js";
 import { Comment } from "../model/comment.js";
+import { Wishlist } from "../model/wishlist.js";
+
 
 const cf_isAdmin = firebase.functions().httpsCallable("isAdmin");
 export async function isAdmin(email) {
@@ -225,3 +227,27 @@ export async function getProductByIdUser(docId){
 	
 }
 
+
+export async function updateWishlist(uid,list){
+	await firebase.firestore().collection(Constant.collectionName.WISHLIST).doc(uid).update(list.serializeForUpdate())
+}
+export async function getWishlist(uid){
+
+	const doc = await firebase.firestore().collection(Constant.collectionName.WISHLIST).doc(uid).get()
+
+	if(doc.exists){
+		return new Wishlist(doc.data())
+	}else{
+		const defaultInfo = Wishlist.instance()
+		
+		await firebase.firestore()
+		.collection(Constant.collectionName.WISHLIST)
+		.doc(uid)
+		.set(defaultInfo.serialize());
+
+		return defaultInfo
+	}
+
+
+
+}

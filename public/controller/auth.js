@@ -49,6 +49,7 @@ export async function addEventListeners(){
         if(user){
             currentUser = user;
 			HomePage.getShoppingCartFromLocalStorage();
+			await HomePage.getWishlist();
 
 			const accountInfo = await FirebaseController.getAccountInfo(user.uid)
 			ProfilePage.setProfileIcon(accountInfo.photoURL)
@@ -59,10 +60,7 @@ export async function addEventListeners(){
              ele = document.getElementsByClassName("modal-post-auth")
                 for(let i =0;i <ele.length;i++)
                     ele[i].style.display = 'block'
-
-            const path = window.location.pathname
-            Routes.routing(path);
-
+					
 			let admin = await FirebaseController.isAdmin(user.email)
 			if(admin.data.Boolean){
 				ele = document.getElementsByClassName("modal-admin")
@@ -70,6 +68,9 @@ export async function addEventListeners(){
 					ele[i].style.display = 'block'
 			}
 
+			const path = window.location.pathname
+			const href = window.location.href
+            Routes.routing(path,href);
 
         }else{
             currentUser = null;
@@ -86,7 +87,8 @@ export async function addEventListeners(){
 				
 			history.pushState(null,null,Routes.routePathname.HOME)
 			const path = window.location.pathname
-			Routes.routing(path)		
+			const href = window.location.href
+			Routes.routing(path,href)		
         }
 
 		
