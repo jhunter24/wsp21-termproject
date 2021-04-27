@@ -19,7 +19,7 @@ history.pushState(null,null,Routes.routePathname.CONFIRMATION + "#" + confirmCar
 
 let taxes = confirmCart.getTotalPrice() * .10;
 let shipping = confirmCart.getTotalQty() * 1.50;
-let orderTotal = shipping + taxes + confirmCart.getTotalPrice()
+
 
 let html = `<div class="row"><h1>Purchase Confirmation</h1></div>
 
@@ -47,6 +47,11 @@ html += `
 	</table>
 		</div>`
 
+let price = confirmCart.getTotalPrice()
+if(Auth.accountInfo.vip){
+	price *= .9
+}
+let orderTotal = shipping + taxes + price
 if(accountInfo.name != "" && accountInfo.address != "")
 html+= `<div class="row" style="font-size: 150%; font-weight: bold;">
 	<div class="col">
@@ -62,7 +67,7 @@ html+= `<div class="row" style="font-size: 150%; font-weight: bold;">
 			<tbody>
 				<tr>
 					<td width="400px">Item Total:</td>
-					<td style="">${Util.currency(confirmCart.getTotalPrice())}</td>
+					<td style="">${Util.currency(price)}</td>
 				</tr>
 				<tr>
 					<td>Estimated Shipping:</td>
@@ -70,7 +75,7 @@ html+= `<div class="row" style="font-size: 150%; font-weight: bold;">
 				</tr>
 				<tr>
 					<td>Estimated Taxes:</td>
-					<td>${Util.currency(confirmCart.getTotalPrice() * .10)}</td>
+					<td>${Util.currency(price * .10)}</td>
 				</tr>
 				<tr>
 					<td>Order Total:</td>

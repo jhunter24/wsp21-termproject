@@ -92,6 +92,24 @@ for(let i = 0;i < deleteForms.length;i++){
 	})
 }
 
+const vipForms = document.getElementsByClassName('form-remove-vip')
+for(let i = 0;i < vipForms.length;i++){
+	vipForms[i].addEventListener('submit', async e =>{
+		e.preventDefault()
+		
+		try{
+		let account = await FirebaseController.getAccountInfo(e.target.uid.value)
+		account.vip = false
+		await FirebaseController.removeVip(e.target.uid.value,account);
+		}catch(e){
+			if(Constant.DEV) console.log(e)
+		}
+	
+	})
+
+
+}
+
 
 }
 
@@ -124,6 +142,10 @@ function buildUserCard(user){
 		  <form class="form-delete-user" method="post">
 		  <input type="hidden" name="uid" value="${user.uid}">
   			<button class="btn btn-outline-danger float-right" type="submit">delete</button>
+		  </form>
+		  <form class="form-remove-vip" method="post">
+  			<input type="hidden" name="uid" value="${user.uid}">
+  			<button class="btn btn-outline-danger" type="submit">Remove VIP</button>
 		  </form>
 	</div>
   </div>

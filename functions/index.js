@@ -285,3 +285,21 @@ async function addProduct(data, context) {
 	  throw new functions.https.HttpsError("internal", "addProduct failed");
 	}
   }
+
+  exports.admin_removeVip = functions.https.onCall(removeVip)
+  async function removeVip(updateInfo,context){
+	if (!isAdmin(context.auth.token.email)) {
+		if (Constant.DEV) console.log("not admin", context.auth.token.email);
+		throw new functions.https.HttpsError(
+		  "unauthenticated",
+		  "Only admin can invoke this function"
+		);
+	  }
+
+	  try{
+		 await admin.firestore().collection(Constant.collectionNames.ACCOUNT_INFO).doc(updateInfo.docId).update(updateInfo.account)	
+		}catch(e){
+		if (Constant.DEV) console.log(e);
+		throw new functions.https.HttpsError("internal", "vip removal failed");
+	  }
+  }

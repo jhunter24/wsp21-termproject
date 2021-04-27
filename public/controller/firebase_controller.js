@@ -288,3 +288,10 @@ export async function getWishlist(uid){
 
 
 }
+
+const cf_removeVip = firebase.functions().httpsCallable("admin_removeVip")
+export async function removeVip(uid,accountInfo){
+	const docId = uid
+	const account = accountInfo.serializeForUpdate()
+	await cf_removeVip({docId,account});
+}

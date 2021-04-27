@@ -5,7 +5,7 @@ export const menuButtonPurchase = document.getElementById("menu-button-purchase"
 export const menuButtonAdmin = document.getElementById("menu-button-admin")
 export const menuButtonProducts = document.getElementById("menu-button-products")
 export const menuButtonWishlist = document.getElementById("menu-button-wishlist")
-
+export const menuButtonVIP = document.getElementById("menu-button-vip")
 
 
 export const formSignIn = document.getElementById("form-signin")

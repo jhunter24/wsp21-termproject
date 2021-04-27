@@ -7,6 +7,7 @@ import * as AdminPage from "../viewpage/admin_page.js"
 import * as ConfirmationPage from "../viewpage/confirmation_page.js"
 import * as CommentPage from "../viewpage/comment_page.js"
 import * as WishlistPage from "../viewpage/wishlist_page.js"
+import * as VIPpage from "../viewpage/vip_page.js"
 
 
 export const routePathname = {
@@ -18,7 +19,8 @@ export const routePathname = {
 	ADMINPRODUCTS: '/adminProductsPage',
 	CONFIRMATION: '/confirmation',
 	COMMENTS: '/comment',
-	WISHLIST: '/wishlist'
+	WISHLIST: '/wishlist',
+	VIP: '/vip'
 }
 
 export const routes = [
@@ -31,6 +33,7 @@ export const routes = [
 	{pathname: routePathname.CONFIRMATION, page: ConfirmationPage.confirmation_page},
 	{pathname: routePathname.COMMENTS, page: CommentPage.comment_page},
 	{pathname: routePathname.WISHLIST, page: WishlistPage.wishlist_page},
+	{pathname: routePathname.VIP, page: VIPpage.vip_page}
 ]
 
 

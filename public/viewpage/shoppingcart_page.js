@@ -63,11 +63,20 @@ export function shoppingcart_page(){
 	});
 
 	html+="</tbody></table>"
+	if(!Auth.accountInfo.vip){
 	html+=`
 		<div style="font-size: 150%">
 			Total:${Util.currency(cart.getTotalPrice())}
 		</div> `
-
+	}
+	if(Auth.accountInfo.vip){
+		html+=`
+		<div style="font-size: 150%">
+			Subtotal: ${Util.currency(cart.getTotalPrice())} <br>
+			Discount: ${Util.currency(cart.getTotalPrice()* .1) }<br>
+			Total:${Util.currency(cart.getTotalPrice() *.9)}
+		</div> `
+	}
 
 	html += `
 	<button id="button-checkout" class="btn btn-outline-primary">check out</button>

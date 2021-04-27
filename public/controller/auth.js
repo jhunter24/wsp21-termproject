@@ -8,6 +8,7 @@ import * as ProfilePage from "../viewpage/profile_page.js"
 
 
 export let currentUser
+export let accountInfo
 export function adminCheck(email){
 	if(Constant.adminEmails.includes(email))return true
 	else return false
@@ -48,10 +49,11 @@ export async function addEventListeners(){
     firebase.auth().onAuthStateChanged(async user =>{
         if(user){
             currentUser = user;
+			
 			HomePage.getShoppingCartFromLocalStorage();
 			await HomePage.getWishlist();
 
-			const accountInfo = await FirebaseController.getAccountInfo(user.uid)
+			accountInfo = await FirebaseController.getAccountInfo(user.uid)
 			ProfilePage.setProfileIcon(accountInfo.photoURL)
 
             let ele = document.getElementsByClassName("modal-pre-auth")
