@@ -29,3 +29,7 @@ input{
 .modal-admin{
 	display:none
 }
+
+.comment-button{
+	display: none
+}

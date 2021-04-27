@@ -101,7 +101,7 @@ export async function vip_page(){
 				</div>
 				<div class="col"></div>
 			`
-			Element.mainContent.innerHTML += html
+			Element.mainContent.innerHTML = html
 
 
 			document.getElementById('vip-form').addEventListener('submit',async e=>{

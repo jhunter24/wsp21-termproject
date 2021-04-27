@@ -13,15 +13,16 @@ export async function comment_page(productId) {
   );
   let comments;
   let product;
-
+  let purchases
   try {
     comments = await FirebaseController.getComments(productId);
     product = await FirebaseController.getProductByIdUser(productId);
-  } catch (e) {
+	purchases = await FirebaseController.getPurchasedItems(Auth.currentUser.uid)
+} catch (e) {
     if (Constant.DEV) console.log(e);
   }
   let html = `<h1>${product.name} Comments</h1>
-	<div><button id="button-add-comment" method="post" class="btn btn-outline-danger">New Comment</button></div>
+	<div><button id="button-add-comment" method="post" class="btn btn-outline-danger comment-button">New Comment</button></div>
 		<table class="table striped-table table-hover">
 		<thead>
 			<th scope="col">Recommend</th>
@@ -48,6 +49,14 @@ export async function comment_page(productId) {
 	`;
 
   Element.mainContent.innerHTML = html;
+  let name = product.name
+  if(purchases.includes(name)){
+	  
+	  let cb = document.getElementsByClassName('comment-button')
+	  for(let i = 0;i<cb.length;i++){
+		  cb[i].style.display = 'block'
+	  }
+  }
 
   document
     .getElementById("button-add-comment")

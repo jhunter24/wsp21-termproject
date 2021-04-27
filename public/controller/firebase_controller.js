@@ -37,40 +37,7 @@ export async function getProductList() {
   return products;
 }
 
-export async function getProductListByPagination() {
-	let products = [];
-  
-	 const ref = await firebase
-	   .firestore()
-	   .collection(Constant.collectionName.PRODUCTS)
-	   .orderBy("name")
-	   .get();
-  
-  //   snapShot.forEach((doc) => {
-  //     const p = new Product(doc.data());
-  //     p.docId = doc.id;
-  //     products.push(p);
-  //   });
-	  let current = firebase.firestore().collection(Constant.collectionName.PRODUCTS).orderBy("name").limit(8)
-	  let last = 0
-	  while(last <= ref.docs.length && last != ref.docs.length){
-		  
-	  let snapShot = await current.get();
-		  let query = []
-		  snapShot.forEach(doc =>{
-			  let p = new Product(doc.data())
-			  p.docId = doc.id
-			  query.push(p)
-		  })
-		  products.push(query)
-		  last += 8
-		  let currentLast = snapShot.docs[snapShot.docs.length-1]
-		  current = await firebase.firestore().collection(Constant.collectionName.PRODUCTS).orderBy("name").startAfter(currentLast).limit(8)
-		  
-	  }
-  
-	return products;
-  }
+
 
 
 export async function checkOut(cart) {
@@ -267,6 +234,62 @@ export async function getProductByIdUser(docId){
 	
 }
 
+export async function getPurchasedItems(uid){
+	let snapShot = await firebase.firestore().collection(Constant.collectionName.PURCHASE_HISTORY).where('uid','==',uid).get()
+	let purchases = []
+	snapShot.forEach(doc=>{
+		let p = doc.data()
+		for(let i = 0;i< p.items.length;i++){
+			if(!purchases.includes(p.items[i].name)){
+				purchases.push(p.items[i].name)
+			}
+		}
+		
+	})
+
+	return purchases
+}
+
+//pagination product list function
+
+export async function getProductListByPagination() {
+	let products = [];
+  
+	 const ref = await firebase
+	   .firestore()
+	   .collection(Constant.collectionName.PRODUCTS)
+	   .orderBy("name")
+	   .get();
+  
+  //   snapShot.forEach((doc) => {
+  //     const p = new Product(doc.data());
+  //     p.docId = doc.id;
+  //     products.push(p);
+  //   });
+	  let current = firebase.firestore().collection(Constant.collectionName.PRODUCTS).orderBy("name").limit(8)
+	  let last = 0
+	  while(last <= ref.docs.length && last != ref.docs.length){
+		  
+	  let snapShot = await current.get();
+		  let query = []
+		  snapShot.forEach(doc =>{
+			  let p = new Product(doc.data())
+			  p.docId = doc.id
+			  query.push(p)
+		  })
+		  products.push(query)
+		  last += 8
+		  let currentLast = snapShot.docs[snapShot.docs.length-1]
+		  current = await firebase.firestore().collection(Constant.collectionName.PRODUCTS).orderBy("name").startAfter(currentLast).limit(8)
+		  
+	  }
+  
+	return products;
+  }
+
+
+
+//Wishlist firebase functions
 
 export async function updateWishlist(uid,list){
 	await firebase.firestore().collection(Constant.collectionName.WISHLIST).doc(uid).update(list.serializeForUpdate())
@@ -292,6 +315,10 @@ export async function getWishlist(uid){
 
 }
 
+
+
+
+// VIP member firebase functions
 const cf_removeVip = firebase.functions().httpsCallable("admin_removeVip")
 export async function removeVip(uid,accountInfo){
 	const docId = uid

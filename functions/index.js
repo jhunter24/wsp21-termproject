@@ -53,23 +53,7 @@ async function deleteProduct(docId,context){
 	  }
 }
 
-exports.admin_deleteVipProduct = functions.https.onCall(deleteVipProduct)
-async function deleteVipProduct(docId,context){
 
-	if (!isAdmin(context.auth.token.email)) {
-		if (Constant.DEV) console.log("not admin", context.auth.token.email);
-		throw new functions.https.HttpsError(
-		  "unauthenticated",
-		  "Only admin can invoke this function"
-		);
-	  }
-	  try {
-		admin.firestore().collection(Constant.collectionNames.VIP_PRODUCTS).doc(docId).delete();
-	  } catch (e) {
-		if (Constant.DEV) console.log(e);
-		throw new functions.https.HttpsError("internal", "deletion failed");
-	  }
-}
 
 
 
@@ -307,6 +291,9 @@ async function addProduct(data, context) {
 	}
   }
 
+
+
+  // VIP member cloud functions
   exports.admin_addVipProduct = functions.https.onCall(addVipProduct)
 async function addVipProduct(data, context) {
 	if (!isAdmin(context.auth.token.email)) {
@@ -345,3 +332,21 @@ async function addVipProduct(data, context) {
 		throw new functions.https.HttpsError("internal", "vip removal failed");
 	  }
   }
+
+  exports.admin_deleteVipProduct = functions.https.onCall(deleteVipProduct)
+async function deleteVipProduct(docId,context){
+
+	if (!isAdmin(context.auth.token.email)) {
+		if (Constant.DEV) console.log("not admin", context.auth.token.email);
+		throw new functions.https.HttpsError(
+		  "unauthenticated",
+		  "Only admin can invoke this function"
+		);
+	  }
+	  try {
+		admin.firestore().collection(Constant.collectionNames.VIP_PRODUCTS).doc(docId).delete();
+	  } catch (e) {
+		if (Constant.DEV) console.log(e);
+		throw new functions.https.HttpsError("internal", "deletion failed");
+	  }
+}
