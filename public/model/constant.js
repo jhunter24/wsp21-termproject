@@ -8,6 +8,7 @@ export const collectionName = {
 	ACCOUNT_INFO: 'account_info',
 	COMMENTS: 'comments',
 	WISHLIST: 'wishlist',
+	VIP_PRODUCTS:'vip_products'
 }
 
 export const storageFolderName = {

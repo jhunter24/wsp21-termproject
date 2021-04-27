@@ -5,7 +5,7 @@ import * as Util from "../viewpage/util.js"
 import * as Routes from "../controller/routes.js"
 import * as HomePage from "../viewpage/home_page.js"
 import * as ProfilePage from "../viewpage/profile_page.js"
-
+import * as VIPpage from "../viewpage/vip_page.js"
 
 export let currentUser
 export let accountInfo
@@ -51,6 +51,7 @@ export async function addEventListeners(){
             currentUser = user;
 			
 			HomePage.getShoppingCartFromLocalStorage();
+			
 			await HomePage.getWishlist();
 
 			accountInfo = await FirebaseController.getAccountInfo(user.uid)

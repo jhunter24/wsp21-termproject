@@ -108,7 +108,9 @@ export async function getAccountInfo(uid) {
     .get();
 
   if (doc.exists) {
-    return new AccountInfo(doc.data());
+	let account = new AccountInfo(doc.data())
+	account.docId = doc.id
+    return account
   } else {
     const defualtInfo = AccountInfo.instance();
     await firebase
@@ -117,6 +119,7 @@ export async function getAccountInfo(uid) {
       .doc(uid)
       .set(defualtInfo.serialize());
 
+	  defualtInfo.docId = uid
     return defualtInfo;
   }
 }
@@ -294,4 +297,31 @@ export async function removeVip(uid,accountInfo){
 	const docId = uid
 	const account = accountInfo.serializeForUpdate()
 	await cf_removeVip({docId,account});
+}
+
+
+
+const cf_addVIPproduct = firebase.functions().httpsCallable("admin_addVipProduct")
+export async function addToVip(product){
+	let serializeProduct = product.serialize()
+	let docId = product.docId
+	await cf_addVIPproduct({docId,serializeProduct})
+}
+
+const cf_deleteVIPproduct = firebase.functions().httpsCallable("admin_deleteVipProduct")
+export async function removeFromVip(docId){
+	await cf_deleteVIPproduct(docId)
+}
+
+export async function getVipProducts(){
+	let snapShot = await firebase.firestore().collection(Constant.collectionName.VIP_PRODUCTS).get()
+	let pList = []
+	snapShot.forEach(doc =>{
+		let p = new Product(doc.data())
+		p.docId = doc.id
+		pList.push(p)	
+	})
+
+
+	return pList
 }

@@ -52,6 +52,27 @@ async function deleteProduct(docId,context){
 		throw new functions.https.HttpsError("internal", "deletion failed");
 	  }
 }
+
+exports.admin_deleteVipProduct = functions.https.onCall(deleteVipProduct)
+async function deleteVipProduct(docId,context){
+
+	if (!isAdmin(context.auth.token.email)) {
+		if (Constant.DEV) console.log("not admin", context.auth.token.email);
+		throw new functions.https.HttpsError(
+		  "unauthenticated",
+		  "Only admin can invoke this function"
+		);
+	  }
+	  try {
+		admin.firestore().collection(Constant.collectionNames.VIP_PRODUCTS).doc(docId).delete();
+	  } catch (e) {
+		if (Constant.DEV) console.log(e);
+		throw new functions.https.HttpsError("internal", "deletion failed");
+	  }
+}
+
+
+
 exports.admin_updateProduct = functions.https.onCall(updateProduct);
 async function updateProduct(updateInfo,context){
 	if (!isAdmin(context.auth.token.email)) {
@@ -283,6 +304,27 @@ async function addProduct(data, context) {
 	} catch (e) {
 	  if (Constant.DEV) console.log(e);
 	  throw new functions.https.HttpsError("internal", "addProduct failed");
+	}
+  }
+
+  exports.admin_addVipProduct = functions.https.onCall(addVipProduct)
+async function addVipProduct(data, context) {
+	if (!isAdmin(context.auth.token.email)) {
+	  if (Constant.DEV) console.log("not admin", context.auth.token.email);
+	  throw new functions.https.HttpsError(
+		"unauthenticated",
+		"Only admin can invoke this function"
+	  );
+	}
+	//assuming data uses object
+	try {
+	  await admin
+		.firestore()
+		.collection(Constant.collectionNames.VIP_PRODUCTS)
+		.doc(data.docId).set(data.serializeProduct);
+	} catch (e) {
+	  if (Constant.DEV) console.log(e);
+	  throw new functions.https.HttpsError("internal", "add VIP Product failed");
 	}
   }
 

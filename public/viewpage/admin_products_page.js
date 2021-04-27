@@ -68,12 +68,38 @@ export async function admin_products_page() {
       Util.enableButton(button, label);
     });
   }
+
+  const vipAddButton = document.getElementsByClassName('form-add-vip')
+  for(let i = 0;i < vipAddButton.length;i++){
+	  vipAddButton[i].addEventListener('submit',async e =>{
+		e.preventDefault()
+		const r = confirm('Are you sure you want to VIP this item')
+		if(!r) return
+		let product =await FirebaseController.getProductById(e.target.docId.value)
+		let discount = (Math.random() * (6-1)) 
+		discount /= 10
+		product.price *= ( 1 - discount)
+		await FirebaseController.addToVip(product)
+		
+
+	  })
+  }
+
+  const vipRemovebutton= document.getElementsByClassName('form-remove-vip')
+  for(let i = 0;i < vipRemovebutton.length;i++){
+	  vipRemovebutton[i].addEventListener('submit', async e=>{
+		  e.preventDefault()
+		  await FirebaseController.removeFromVip(e.target.docId.value)
+	  })
+  }
+
+
 }
 
 function buildProductCard(product) {
   return `
 	<div id="card-${product.docId}" class="card" style="width: 18rem; display:inline-block;">
-	<img src="${product.imageURL}" class="card-img-top" >
+	<img src="${product.imageURL}" class="card-img-top" width="200px" height="200px">
 	<div class="card-body">
 	  <h5 class="card-title">${product.name}</h5>
 	  <p class="card-text">$${product.price}<br> ${product.summary}</p>
@@ -87,6 +113,16 @@ function buildProductCard(product) {
 		<input type="hidden" name="imageName" value="${product.imageName}">
 		<button class="btn btn-outline-danger" type="submit">Delete</button>	
 	</form>
+	<div>
+	<form class="form-add-vip float-left" method="post">
+		<input type="hidden" name="docId" value="${product.docId}">
+		<button class="btn btn-outline-primary" type="submit">Add VIP</button>	
+	</form>
+	<form class="form-remove-vip float-right" method="post">
+		<input type="hidden" name="docId" value="${product.docId}">
+		<button class="btn btn-outline-danger">Remove VIP</button>
+	</form>
+	</div>
   </div>
 	
 	`;
